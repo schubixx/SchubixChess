@@ -16,6 +16,9 @@
         ) }}">
 
   {% block styles %}{% endblock %}
+  <script>
+    window.PIECE_SET = {{ piece_set|tojson }};
+  </script>
   {% block scripts %}{% endblock %}
 </head>
 
@@ -51,6 +54,23 @@
       </a>
     {% endif %}
   </nav>
+
+    <form method="post"
+      action="{{ url_for('main.set_piece_set') }}"
+      class="piece-set-form">
+
+  <select name="piece_set"
+          onchange="this.form.submit()">
+
+    {% for option in available_piece_sets %}
+      <option value="{{ option }}"
+              {% if option == piece_set %}selected{% endif %}>
+        {{ option }}
+      </option>
+    {% endfor %}
+
+  </select>
+  </form>
 
     <div class="lichess-area">
 

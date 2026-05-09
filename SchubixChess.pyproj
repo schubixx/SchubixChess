@@ -41,6 +41,12 @@
     <Content Include="chess_app\templates\error.html" />
     <Content Include="chess_app\templates\menu.html" />
     <Content Include="chess_app\templates\play.html" />
+    <Content Include="chess_app\templates\play\collections.html" />
+    <Content Include="chess_app\templates\play\collection_created.html" />
+    <Content Include="chess_app\templates\play\edit_collection.html" />
+    <Content Include="chess_app\templates\play\error.html" />
+    <Content Include="chess_app\templates\play\fen_select.html" />
+    <Content Include="chess_app\templates\play\new_collection.html" />
     <Content Include="chess_app\templates\visualization.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
@@ -76,6 +82,7 @@
     <Folder Include="chess_app\static\img\chesspieces\merida" />
     <Folder Include="chess_app\static\js" />
     <Folder Include="chess_app\templates" />
+    <Folder Include="chess_app\templates\play\" />
     <Folder Include="chess_app\visualization" />
   </ItemGroup>
   <ItemGroup>

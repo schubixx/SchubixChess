@@ -3,7 +3,7 @@ const PIECE_IMAGE_MAP = {
     p: 'bP', n: 'bN', b: 'bB', r: 'bR', q: 'bQ', k: 'bK'
 };
 
-const PIECE_SET = 'merida';
+const PIECE_SET = window.PIECE_SET || 'merida';
 
 let currentFen = window.INITIAL_FEN || 'start';
 let orientation = 'white';

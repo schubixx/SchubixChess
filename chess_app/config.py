@@ -3,6 +3,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
+DEFAULT_PIECE_SET = "merida"
+AVAILABLE_PIECE_SETS = ["merida", "cburnett"]
 
 class Config:
     SECRET_KEY = os.getenv(
