@@ -1,0 +1,33 @@
+# Python Cache
+__pycache__/
+*.py[cod]
+
+# Virtuelle Umgebungen
+venv/
+.venv/
+
+# VS Code / PyCharm
+.vscode/
+.idea/
+
+# Build / Distribution
+build/
+dist/
+*.egg-info/
+
+# Secrets
+*.pfx
+*.key
+*.pem
+.env
+secrets.json
+
+# Visual Studio
+.vs/
+bin/
+obj/
+
+# NuGet packages
+packages/
+*.db
+*.zip

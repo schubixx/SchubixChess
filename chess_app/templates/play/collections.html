@@ -1,0 +1,60 @@
+﻿{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/play.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>Meine Sammlungen</h2>
+
+<p>
+    <a href="{{ url_for('play.new_collection') }}">
+        <button type="button" class="action-button">Neue Sammlung</button>
+    </a>
+</p>
+
+{% if collections %}
+<table class="collection-table">
+    <thead>
+        <tr>
+            <th>Collection ID</th>
+            <th>Beschreibung</th>
+            <th>Aktionen</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for collection in collections %}
+        <tr>
+            <td>
+                <code>{{ collection.collection_id }}</code>
+            </td>
+            <td>{{ collection.description or "-" }}</td>
+            <td>
+                <a href="{{ url_for('play.edit_collection', collection_id=collection.collection_id) }}">
+                    <button type="button">Bearbeiten</button>
+                </a>
+
+                <form method="post"
+                      action="{{ url_for('play.delete_collection', collection_id=collection.collection_id) }}"
+                      style="display:inline;"
+                      onsubmit="return confirm('Collection wirklich löschen? Alle zugehörigen Stellungen werden ebenfalls gelöscht.');">
+                    <button type="submit">Löschen</button>
+                </form>
+
+                <button
+                    type="button"
+                    onclick="copyCollectionLink('{{ url_for('play.select_fen', COLLECTION=collection.collection_id, _external=True) }}')">
+                    Link kopieren
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+<p>Du hast noch keine Collections angelegt.</p>
+{% endif %}
+{% endblock %}
+

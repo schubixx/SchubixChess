@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Schach960
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet"
+      href="{{ url_for(
+          'static',
+          filename='css/visualization.css'
+      ) }}">
+{% endblock %}
+
+{% block content %}
+
+<h1>Schach960</h1>
+
+ <section class="board-panel">
+     <h1>Schach 960 Startstellung</h1>
+     <div class="board-shell">
+       <div class="board-top-files" id="boardTopFiles"></div>
+
+       <div class="board-middle">
+         <div class="board-ranks-left" id="boardRanksLeft"></div>
+         <div id="board" class="board"></div>
+         <div class="board-ranks-right" id="boardRanksRight"></div>
+       </div>
+
+       <div class="board-bottom-files" id="boardBottomFiles"></div>
+     </div>
+ </section>
+
+  <div class="controls">
+
+    <button id="draw-btn">
+      Grundstellung auslosen
+    </button>
+
+    <p>
+      <strong>FEN:</strong>
+    </p>
+
+    <code id="fen-output">
+      {{ fen }}
+    </code>
+
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+  window.INITIAL_FEN = {{ fen|tojson }};
+</script>
+
+<script src="{{ url_for(
+    'static',
+    filename='js/visualization_board.js'
+) }}"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const button = document.getElementById("draw-btn");
+
+    button.addEventListener("click", async () => {
+
+        const response = await fetch(
+            "/schach960/auslosen",
+            {
+                method: "POST"
+            }
+        );
+
+        const data = await response.json();
+
+        document.getElementById(
+            "fen-output"
+        ).textContent = data.fen;
+
+        window.setBoardFen(data.fen);
+    });
+
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+﻿{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/play.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<section class="hero-card compact">
+  <h2>Collection erstellt</h2>
+
+  <p>Deine COLLECTION_ID:</p>
+  <h3>{{ collection_id }}</h3>
+
+  <p>Aufruf mit folgendem Link:</p>
+
+  <code id="collection-link">
+      {{ url_for('play.index', COLLECTION=collection_id, _external=True) }}
+  </code>
+
+  <br><br>
+
+  <button
+      type="button"
+      onclick="copyCollectionLink('{{ url_for('main.index', COLLECTION=collection_id, _external=True) }}')">
+      Link kopieren
+  </button>
+
+  <br><br>
+
+  <img
+      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ url_for('play.index', COLLECTION=collection_id, _external=True) | urlencode }}"
+      alt="QR Code"
+      class="qr-code"
+  />  
+
+  <br><br>
+
+  <a href="{{ url_for('play.index', COLLECTION=collection_id, _external=True) }}" target="_blank">
+      <button type="button">Collection öffnen</button>
+  </a>
+</section>
+{% endblock %}

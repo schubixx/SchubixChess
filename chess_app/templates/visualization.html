@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Visualisierungsaufgaben{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/visualization.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="page">
+        <section class="board-panel">
+            <h1>Visualisierung</h1>
+            <div class="board-shell">
+              <div class="board-top-files" id="boardTopFiles"></div>
+
+              <div class="board-middle">
+                <div class="board-ranks-left" id="boardRanksLeft"></div>
+                <div id="board" class="board"></div>
+                <div class="board-ranks-right" id="boardRanksRight"></div>
+              </div>
+
+              <div class="board-bottom-files" id="boardBottomFiles"></div>
+            </div>
+            <div id="status" class="status">Bereit</div>
+            <!--<section class="history-panel">-->
+                <!--<h2>Zughistorie</h2>-->
+                <div id="moveHistory" class="history"></div>
+            <!--</section>-->
+            <div class="board-nav" aria-label="Partienavigation">
+                <button id="prevMoveBtn" type="button" title="Einen Zug zurück">←</button>
+                <button id="nextMoveBtn" type="button" title="Einen Zug vor">→</button>
+                <button id="showSolutionBtn" type="button">Lösung</button>
+            </div>
+            <div hidden name="navStatus" class="nav-status" display: none;>Zug 0 / 0</div>
+        </section>
+
+        <section class="side-panel">
+          <div class="settings-row">
+              <label>
+                  Halbzüge
+                  <input id="number1" type="number" min="1" step="1" value="{{ selected_number1 }}">
+              </label>
+
+              <label>
+                  Rating
+                  <input id="number2" type="number" min="1" step="1" value="{{ selected_number2 }}">
+              </label>
+
+              <label>
+                  Motiv
+                  <select id="select1">
+                      {% for t in thema_options %}
+                          <option value="{{ t.value }}" {% if t.value == selected_thema %}selected{% endif %}>
+                              {{ t.label }}
+                          </option>
+                      {% endfor %}
+                  </select>
+              </label>
+
+              <label>
+                  Länge
+                  <select id="select2">
+                      {% for l in laenge_options %}
+                          <option value="{{ l.value }}" {% if l.value == selected_laenge %}selected{% endif %}>
+                              {{ l.label }}
+                          </option>
+                      {% endfor %}
+                  </select>
+              </label>
+          </div>
+          <div class="row">
+            <button id="generateTaskBtn" type="button">Neue Aufgabe generieren</button>
+            <button id="downloadPgnBtn">PGN herunterladen</button>
+          </div>
+          <div class="row">
+            <input id="moveInput" type="hidden" placeholder="z. B. e2e4, Nf3, O-O">
+            <button id="moveBtn" type="button" hidden>Zug ausführen</button>
+          </div>
+          <div class="row">
+            <button id="resetBtn" type="button" hidden>Reset</button>
+            <button id="flipBtn" type="button" hidden>Brett drehen</button>
+          </div>
+          <div class="row">
+            <input id="fenInput" type="hidden" placeholder="FEN laden">
+            <button id="fenBtn" type="button" hidden>FEN setzen</button>
+          </div>
+
+        </section>
+    </main>
+
+    <script>
+        window.INITIAL_FEN = {{ fen|tojson }};
+    </script>
+<script src="{{ url_for('static', filename='js/visualization_board.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Fehler | Lichess AI Starter{% endblock %}
+{% block content %}
+<section class="hero-card error-card">
+    <h2>{{ title }}</h2>
+    <p>{{ message }}</p>
+    <a class="link-button" href="{{ url_for('main.index') }}">Zur Startseite</a>
+</section>
+{% endblock %}

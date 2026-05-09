@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}FEN-Auswahl | Lichess AI Starter{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/play.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/play_main.js') }}"></script>
+{% endblock %}
+{% block content %}
+
+<section class="hero-card compact">
+    <h2>Stellung ausspielen</h2>
+    <p>
+        {% if collection_record and collection_record.explanation %}
+            Willkommen, {{ username }}.<br />
+            {{ collection_record.explanation }}
+        {% else %}
+            Willkommen, {{ username }}. Wähle eine Stellung und starte eine neue Partie in einem neuen Fenster.
+        {% endif %}
+    </p>
+    <!--<p class="muted">Die OAuth-Credentials sind serverseitig in SQLite gespeichert, damit du mehrere Partien starten kannst.</p>-->
+    {% if current_collection %}
+        <p class="muted"><strong>Diese Sammlung hat folgende ID:</strong> {{ current_collection }}</p>
+    {% endif %}
+</section>
+
+<section class="grid">
+    {% for position in positions %}
+    <article class="preset-card">
+        <h3>{{ position.title }}</h3>
+        {% if position.description %}
+            <p class="position-description">{{ position.description }}</p>
+        {% endif %}
+        <p>
+            Level: {{ position.ai_level if position.ai_level is not none else "-" }} |
+            Farbe: {{ position.color or "-" }} |
+            Zeit: {{ position.clock_limit if position.clock_limit is not none else "-" }} + {{ position.clock_increment if position.clock_increment is not none else 0 }}
+        </p>
+        <!-- <code class="fen-box">{{ position.fen }}</code>-->
+        <div class="chess-board">
+            {% for row in position.board %}
+                {% for square in row %}
+                    <div class="chess-square {{ square.color }}">
+                        {% if square.piece %}
+                            <img
+                                class="piece-img"
+                                src="{{ url_for('static', filename='pieces/cburnett/' ~ square.piece) }}"
+                                alt=""
+                                draggable="false"
+                            >
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+      <button class="action-button" onclick="startGame({{ position.id }})">Partie starten</button>
+    </article>
+    {% endfor %}
+</section>
+
+{% if not positions %}
+<div class="status">
+    Keine Stellungen für COLLECTION "{{ current_collection }}" gefunden.
+</div>
+{% endif %}
+
+<div id="status" class="status"></div>
+
+<script>
+async function startGame(positionId) {
+    const status = document.getElementById("status");
+    status.textContent = "Partie wird erstellt...";
+
+    const gameWindow = window.open("", "_blank");
+
+    try {
+        const response = await fetch(
+            `{{ url_for('play.start_game', position_id=0) }}`.replace("/0", "/" + positionId),
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.details || data.error || "Unbekannter Fehler");
+        }
+
+        gameWindow.location = data.game_url;
+        status.textContent = `Partie gestartet: ${data.game_id}`;
+    } catch (error) {
+        if (gameWindow) {
+            gameWindow.close();
+        }
+        status.textContent = `Fehler: ${error.message}`;
+    }
+}
+</script>
+{% endblock %}

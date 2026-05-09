@@ -1,0 +1,9 @@
+{
+  "name": "Default-Set",
+  "positions": [
+    {
+      "fen": "8/8/8/8/8/8/8/K6k w - - 0 1",
+      "sideToMove": "white"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+﻿from .chess960.routes import chess960_bp

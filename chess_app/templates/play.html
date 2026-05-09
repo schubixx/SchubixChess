@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Stellungen ausspielen
+{% endblock %}
+
+{% block content %}
+
+<h1>Stellungen ausspielen</h1>
+
+{% if config_id %}
+  <p>
+    Geladene Konfiguration:
+    {{ config_id }}
+  </p>
+{% else %}
+  <p>Default-Set geladen</p>
+{% endif %}
+
+<div id="play-app"
+     data-config='{{ config | tojson }}'>
+</div>
+
+<script src="{{ url_for(
+    'static',
+    filename='js/play.js'
+) }}"></script>
+
+{% endblock %}

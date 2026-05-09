@@ -1,0 +1,100 @@
+﻿{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/play.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>Neue Collection anlegen</h2>
+
+<p>Du kannst bis zu 8 Stellungen erfassen. Gespeichert werden nur Zeilen, in denen ein FEN eingetragen ist.</p>
+
+<form method="post" class="collection-form">
+  <div class="form-row">
+      <label for="description">Beschreibung der Collection</label>
+      <textarea id="description" name="description" rows="3"></textarea>
+  </div>
+  <div class="form-row">
+      <label for="explanation">Erläuterung für die Auswahlseite</label>
+      <textarea id="explanation" name="explanation" rows="3"
+                placeholder="Dieser Text erscheint später auf der Seite fen_select."></textarea>
+  </div>
+  {% for i in range(8) %}
+    <fieldset class="position-block">
+        <legend>Stellung {{ i + 1 }}</legend>
+
+        <div class="form-row">
+            <label for="title_{{ i }}">Titel</label>
+            <input type="text" id="title_{{ i }}" name="title_{{ i }}" maxlength="255">
+        </div>
+
+        <div class="form-row">
+            <label for="fen_{{ i }}">FEN</label>
+            <input type="text" id="fen_{{ i }}" name="fen_{{ i }}" placeholder="z. B. rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1">
+        </div>
+
+        <div class="form-grid">
+            <div class="form-row">
+                <label for="ai_level_{{ i }}">Level (1-8)</label>
+                <input
+                    type="number"
+                    id="ai_level_{{ i }}"
+                    name="ai_level_{{ i }}"
+                    min="1"
+                    max="8"
+                    step="1"
+                    inputmode="numeric"
+                    value="1">
+            </div>
+
+            <div class="form-row">
+                <label for="position_description_{{ i }}">Beschreibung der Stellung</label>
+                <textarea
+                    id="position_description_{{ i }}"
+                    name="position_description_{{ i }}"
+                    rows="2"
+                    placeholder="Kurze Beschreibung dieser Stellung"
+                ></textarea>
+                <label for="color_{{ i }}">Color</label>
+                <select id="color_{{ i }}" name="color_{{ i }}">
+                    <option value="random" selected>random</option>
+                    <option value="white">white</option>
+                    <option value="black">black</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="clock_limit_{{ i }}">Clock Limit (0-10800)</label>
+                <input
+                    type="number"
+                    id="clock_limit_{{ i }}"
+                    name="clock_limit_{{ i }}"
+                    min="0"
+                    max="10800"
+                    step="1"
+                    inputmode="numeric"
+                    value="300">
+            </div>
+
+            <div class="form-row">
+                <label for="clock_increment_{{ i }}">Clock Increment (0-60)</label>
+                <input
+                    type="number"
+                    id="clock_increment_{{ i }}"
+                    name="clock_increment_{{ i }}"
+                    min="0"
+                    max="60"
+                    step="1"
+                    inputmode="numeric"
+                    value="0">
+            </div>
+        </div>
+    </fieldset>
+    {% endfor %}
+
+    <div class="form-actions">
+        <button type="submit" class="action-button">Collection speichern</button>
+    </div>
+</form>
+{% endblock %}

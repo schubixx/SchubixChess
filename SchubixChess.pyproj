@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3e8ca916-731e-4aba-8b44-40e9b43c6b6f}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>run.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>Global|PythonCore|3.9</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include="chess_app\static\css\app.css" />
+    <Content Include="chess_app\static\css\visualization.css" />
+    <Content Include="chess_app\static\img\chesspieces\merida\bB.svg" />
+    <Content Include="chess_app\static\img\chesspieces\merida\bK.svg" />
+    <Content Include="chess_app\static\img\chesspieces\merida\bN.svg" />
+    <Content Include="chess_app\static\img\chesspieces\merida\bP.svg" />
+    <Content Include="chess_app\static\img\chesspieces\merida\bQ.svg" />
+    <Content Include="chess_app\static\img\chesspieces\merida\bR.svg" />
+    <Content Include="chess_app\static\img\chesspieces\merida\wB.svg" />
+    <Content Include="chess_app\static\img\chesspieces\merida\wK.svg" />
+    <Content Include="chess_app\static\img\chesspieces\merida\wN.svg" />
+    <Content Include="chess_app\static\img\chesspieces\merida\wP.svg" />
+    <Content Include="chess_app\static\img\chesspieces\merida\wQ.svg" />
+    <Content Include="chess_app\static\img\chesspieces\merida\wR.svg" />
+    <Content Include="chess_app\static\js\play.js" />
+    <Content Include="chess_app\static\js\visualization.js" />
+    <Content Include="chess_app\static\js\visualization_board.js" />
+    <Content Include="chess_app\templates\base.html" />
+    <Content Include="chess_app\templates\error.html" />
+    <Content Include="chess_app\templates\menu.html" />
+    <Content Include="chess_app\templates\play.html" />
+    <Content Include="chess_app\templates\visualization.html" />
+    <Content Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="chess_app\auth\lichess.py" />
+    <Compile Include="chess_app\auth\__init__.py" />
+    <Compile Include="chess_app\config.py" />
+    <Compile Include="chess_app\extensions.py" />
+    <Compile Include="chess_app\LichessEnums.py" />
+    <Compile Include="chess_app\main\routes.py" />
+    <Compile Include="chess_app\main\__init__.py" />
+    <Compile Include="chess_app\models.py" />
+    <Compile Include="chess_app\services\lichess_puzzle_service.py" />
+    <Compile Include="chess_app\services\play_service.py" />
+    <Compile Include="chess_app\services\visualization_service.py" />
+    <Compile Include="chess_app\services\__init__.py" />
+    <Compile Include="chess_app\utils.py" />
+    <Compile Include="chess_app\visualization\routes.py" />
+    <Compile Include="chess_app\visualization\task_state.py" />
+    <Compile Include="chess_app\visualization\__init__.py" />
+    <Compile Include="chess_app\__init__.py" />
+    <Compile Include="run.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="chess_app" />
+    <Folder Include="chess_app\auth" />
+    <Folder Include="chess_app\main" />
+    <Folder Include="chess_app\services" />
+    <Folder Include="chess_app\static\" />
+    <Folder Include="chess_app\static\css" />
+    <Folder Include="chess_app\static\img\" />
+    <Folder Include="chess_app\static\img\chesspieces\" />
+    <Folder Include="chess_app\static\img\chesspieces\merida" />
+    <Folder Include="chess_app\static\js" />
+    <Folder Include="chess_app\templates" />
+    <Folder Include="chess_app\visualization" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.9" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>

@@ -1,0 +1,125 @@
+﻿{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/play.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>Collection bearbeiten</h2>
+
+<p>
+    <strong>Collection ID:</strong>
+    <code>{{ collection.collection_id }}</code>
+</p>
+
+<form method="post" class="collection-form">
+    <div class="form-row">
+        <label for="description">Beschreibung der Collection</label>
+        <textarea id="description" name="description" rows="3">{{ collection.description or "" }}</textarea>
+    </div>
+
+    <div class="form-row">
+        <label for="explanation">Erläuterung für die Auswahlseite</label>
+        <textarea id="explanation" name="explanation" rows="3">{{ collection.explanation or "" }}</textarea>
+    </div>
+
+    <h3>Stellungen</h3>
+    <p>Leere FEN bedeutet: Diese Stellung wird beim Speichern gelöscht.</p>
+
+    {% for position in positions %}
+    <fieldset class="position-block">
+        <legend>Stellung {{ loop.index }}</legend>
+
+        <div class="form-row">
+            <label for="title_{{ position.id }}">Titel</label>
+            <input
+                type="text"
+                id="title_{{ position.id }}"
+                name="title_{{ position.id }}"
+                maxlength="255"
+                value="{{ position.title or '' }}"
+            >
+        </div>
+
+        <div class="form-row">
+            <label for="position_description_{{ position.id }}">Beschreibung der Stellung</label>
+            <textarea
+                id="position_description_{{ position.id }}"
+                name="position_description_{{ position.id }}"
+                rows="2"
+            >{{ position.description or "" }}</textarea>
+        </div>
+
+        <div class="form-row">
+            <label for="fen_{{ position.id }}">FEN</label>
+            <input
+                type="text"
+                id="fen_{{ position.id }}"
+                name="fen_{{ position.id }}"
+                value="{{ position.fen or '' }}"
+                placeholder="Leer lassen, um diese Stellung zu löschen"
+            >
+        </div>
+
+        <div class="form-grid">
+            <div class="form-row">
+                <label for="ai_level_{{ position.id }}">Level (1-8)</label>
+                <input
+                    type="number"
+                    id="ai_level_{{ position.id }}"
+                    name="ai_level_{{ position.id }}"
+                    min="1"
+                    max="8"
+                    step="1"
+                    value="{{ position.ai_level or 1 }}"
+                >
+            </div>
+
+            <div class="form-row">
+                <label for="color_{{ position.id }}">Color</label>
+                <select id="color_{{ position.id }}" name="color_{{ position.id }}">
+                    <option value="random" {% if position.color == "random" %}selected{% endif %}>random</option>
+                    <option value="white" {% if position.color == "white" %}selected{% endif %}>white</option>
+                    <option value="black" {% if position.color == "black" %}selected{% endif %}>black</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="clock_limit_{{ position.id }}">Clock Limit (0-10800)</label>
+                <input
+                    type="number"
+                    id="clock_limit_{{ position.id }}"
+                    name="clock_limit_{{ position.id }}"
+                    min="0"
+                    max="10800"
+                    step="1"
+                    value="{{ position.clock_limit if position.clock_limit is not none else 300 }}"
+                >
+            </div>
+
+            <div class="form-row">
+                <label for="clock_increment_{{ position.id }}">Clock Increment (0-60)</label>
+                <input
+                    type="number"
+                    id="clock_increment_{{ position.id }}"
+                    name="clock_increment_{{ position.id }}"
+                    min="0"
+                    max="60"
+                    step="1"
+                    value="{{ position.clock_increment if position.clock_increment is not none else 0 }}"
+                >
+            </div>
+        </div>
+    </fieldset>
+    {% endfor %}
+
+    <div class="form-actions">
+        <button type="submit" class="action-button">Änderungen speichern</button>
+
+        <a href="{{ url_for('play.my_collections') }}">
+            <button type="button">Zurück</button>
+        </a>
+    </div>
+</form>
+{% endblock %}

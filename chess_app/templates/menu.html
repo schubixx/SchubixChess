@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Menü
+{% endblock %}
+
+{% block content %}
+
+<h1>Schachtraining</h1>
+
+<div class="menu-grid">
+
+  <a class="menu-card" href="{{ url_for('main.visualization') }}">
+
+    <h2>
+      Visualisierungsaufgaben
+    </h2>
+
+    <p>
+      Variantenberechnung und
+      Brettvorstellung trainieren.
+    </p>
+  </a>
+
+
+  <a class="menu-card" href="{{ url_for('play.select_fen') }}">
+
+    <h2>
+      Stellungen ausspielen
+    </h2>
+
+    <p>
+      Spiele Trainingsstellungen
+      gegen die Engine aus.
+    </p>
+  </a>
+
+  <a class="menu-card" href="{{ url_for('chess960.index') }}">
+
+    <h2>
+      Schach960
+    </h2>
+
+    <p>
+      zufällige Startstellung für Schach960 auslosen
+    </p>
+  </a>
+
+</div>
+
+{% endblock %}
