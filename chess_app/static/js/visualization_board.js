@@ -3,7 +3,9 @@ const PIECE_IMAGE_MAP = {
     p: 'bP', n: 'bN', b: 'bB', r: 'bR', q: 'bQ', k: 'bK'
 };
 
-const PIECE_SET = window.PIECE_SET || 'merida';
+function getPieceSet() {
+  return window.PIECE_SET || 'merida';
+}
 
 let currentFen = window.INITIAL_FEN || 'start';
 let orientation = 'white';
@@ -208,7 +210,7 @@ function renderBoard() {
             if (piece) {
                 const pieceEl = document.createElement('img');
                 pieceEl.className = `piece ${piece === piece.toUpperCase() ? 'white' : 'black'}`;
-                pieceEl.src = `/static/img/chesspieces/${PIECE_SET}/${PIECE_IMAGE_MAP[piece]}.svg`;
+                pieceEl.src = `/static/img/chesspieces/${getPieceSet()}/${PIECE_IMAGE_MAP[piece]}.svg`;
                 pieceEl.alt = piece;
                 pieceEl.draggable = true;
                 pieceEl.dataset.square = squareName;
@@ -544,10 +546,10 @@ document.addEventListener('DOMContentLoaded', () => {
     setNavigationLine([currentFen], [], 0);
 });
 
-    function clearSelectedSquare() {
-    selectedSourceSquare = null;
-    document.querySelectorAll('.square.selected')
-        .forEach(el => el.classList.remove('selected'));
+function clearSelectedSquare() {
+  selectedSourceSquare = null;
+  document.querySelectorAll('.square.selected')
+      .forEach(el => el.classList.remove('selected'));
 }
 
 function selectSourceSquare(squareEl, squareName) {
@@ -581,18 +583,6 @@ async function checkSolutionMove(move) {
     }
 }
 
-function clearSelectedSquare() {
-  selectedSourceSquare = null;
-  document.querySelectorAll('.square.selected')
-    .forEach(el => el.classList.remove('selected'));
-}
-
-function selectSourceSquare(squareEl, squareName) {
-  clearSelectedSquare();
-  selectedSourceSquare = squareName;
-  squareEl.classList.add('selected');
-}
-
 window.setBoardFen = function (fen) {
   currentFen = fen;
   setOrientationFromFen(fen);
@@ -600,3 +590,9 @@ window.setBoardFen = function (fen) {
 };
 
 window.renderBoard = renderBoard;
+
+window.setBoardFen = function (fen) {
+  currentFen = fen;
+  setOrientationFromFen(fen);
+  setNavigationLine([fen], [], 0);
+};

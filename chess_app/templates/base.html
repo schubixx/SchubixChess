@@ -16,10 +16,6 @@
         ) }}">
 
   {% block styles %}{% endblock %}
-  <script>
-    window.PIECE_SET = {{ piece_set|tojson }};
-  </script>
-  {% block scripts %}{% endblock %}
 </head>
 
 <body>
@@ -108,6 +104,12 @@
     {% block content %}
     {% endblock %}
   </main>
+
+  <script>
+    window.PIECE_SET = {{ piece_set|tojson }};
+  </script>
+  {% block scripts %}{% endblock %}
+
 
 </body>
 </html>
