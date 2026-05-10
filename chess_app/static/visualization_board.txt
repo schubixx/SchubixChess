@@ -1,4 +1,4 @@
-const PIECE_IMAGE_MAP = {
+﻿const PIECE_IMAGE_MAP = {
     P: 'wP', N: 'wN', B: 'wB', R: 'wR', Q: 'wQ', K: 'wK',
     p: 'bP', n: 'bN', b: 'bB', r: 'bR', q: 'bQ', k: 'bK'
 };

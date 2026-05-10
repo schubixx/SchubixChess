@@ -10,6 +10,7 @@ import sqlite3
 import random
 from ..services.lichess_puzzle_service import LichessPuzzleService
 from ..LichessEnums import Thema, Laenge, THEMA_NAMEN, LAENGE_NAMEN
+from .parameter_codec import (encode_visualization_parameter,decode_visualization_parameter,)
 from flask import Blueprint, jsonify, render_template, request, Response, session
 from datetime import datetime
 
@@ -393,6 +394,34 @@ def generate_task_pgn(number1, number2, select1, select2) -> str:
     finally:
         conn.close()
 
+def create_task_from_values(number1, number2, select1, select2):
+    global current_task, board
+
+    pgn_text = generate_task_pgn(
+        number1,
+        number2,
+        select1,
+        select2,
+    )
+
+    current_task = TaskState(pgn_text)
+
+    session["pgn"] = pgn_text
+    session["task_loaded"] = True
+    session["user_has_answered"] = False
+    session["solution_shown"] = False
+
+    session["selected_number1"] = number1
+    session["selected_number2"] = number2
+    session["selected_thema"] = select1
+    session["selected_laenge"] = select2
+
+    session.modified = True
+
+    board = chess.Board(current_task.start_fen)
+
+    return current_task
+
 def load_game_from_pgn(pgn_text: str) -> chess.pgn.Game:
     game = chess.pgn.read_game(io.StringIO(pgn_text))
     if game is None:
@@ -478,15 +507,50 @@ def index():
     selected_number1 = session.get("selected_number1", 3)
     selected_number2 = session.get("selected_number2", 1500)
 
+    encoded_parameter = request.args.get("parameter")
+    parameter_error = None
+    task_data = None
+
+    if encoded_parameter:
+        try:
+            decoded = decode_visualization_parameter(encoded_parameter)
+
+            selected_number1 = decoded.halbzuege
+            selected_number2 = decoded.rating
+            selected_thema = decoded.thema
+            selected_laenge = decoded.laenge
+
+            task = create_task_from_values(
+                selected_number1,
+                selected_number2,
+                selected_thema,
+                selected_laenge,
+            )
+
+            task_data = task.to_dict()
+
+        except Exception as exc:
+            parameter_error = str(exc)
+
+    current_parameter = encode_visualization_parameter(
+        halbzuege=int(selected_number1),
+        rating=int(selected_number2),
+        thema=int(selected_thema),
+        laenge=int(selected_laenge),
+    )
+
     return render_template(
         "visualization.html",
-        fen=board.fen(),
+        fen=task_data["fen"] if task_data else board.fen(),
         thema_options=thema_options,
         selected_thema=selected_thema,
         laenge_options=laenge_options,
         selected_laenge=selected_laenge,
         selected_number1=selected_number1,
-        selected_number2=selected_number2
+        selected_number2=selected_number2,
+        initial_task=task_data,
+        parameter_error=parameter_error,
+        current_parameter=current_parameter,
     )
 
 @visualization_bp.post("/move")
@@ -568,37 +632,33 @@ def set_fen():
 
 @visualization_bp.route("/generate_task", methods=["POST"])
 def generate_task():
-    global current_task, board
-
     data = request.get_json() or {}
 
     number1 = int(data.get("number1", 0))
     number2 = int(data.get("number2", 0))
     select1 = int(data.get("select1", 0))
     select2 = int(data.get("select2", 0))
-    session["selected_number1"] = number1      # Halbzüge
-    session["selected_number2"] = number2      # Rating
-    session["selected_thema"] = select1        # Motiv
-    session["selected_laenge"] = select2       # Länge
-    session.modified = True
 
-    pgn_text = generate_task_pgn(number1, number2, select1, select2)
+    task = create_task_from_values(
+        number1,
+        number2,
+        select1,
+        select2,
+    )
 
-    current_task = TaskState(pgn_text)
-
-    session["pgn"] = pgn_text
-    session["task_loaded"] = True
-    session["user_has_answered"] = False
-    session["solution_shown"] = False
-    session.modified = True
-
-    board = chess.Board(current_task.start_fen)
+    encoded_parameter = encode_visualization_parameter(
+        halbzuege=number1,
+        rating=number2,
+        thema=select1,
+        laenge=select2,
+    )
 
     return jsonify({
         "ok": True,
-        **current_task.to_dict(),
+        **task.to_dict(),
         **get_session_state(),
-        "message": "Neue Aufgabe generiert"
+        "parameter": encoded_parameter,
+        "message": "Neue Aufgabe generiert",
     })
 
 @visualization_bp.route("/solution", methods=["GET"])

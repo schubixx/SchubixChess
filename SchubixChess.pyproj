@@ -34,10 +34,11 @@
     <Content Include="chess_app\static\img\chesspieces\merida\wP.svg" />
     <Content Include="chess_app\static\img\chesspieces\merida\wQ.svg" />
     <Content Include="chess_app\static\img\chesspieces\merida\wR.svg" />
+    <Content Include="chess_app\static\js\board.js" />
     <Content Include="chess_app\static\js\play.js" />
     <Content Include="chess_app\static\js\visualization.js" />
-    <Content Include="chess_app\static\js\visualization_board.js" />
     <Content Include="chess_app\templates\base.html" />
+    <Content Include="chess_app\templates\chess960.html" />
     <Content Include="chess_app\templates\error.html" />
     <Content Include="chess_app\templates\menu.html" />
     <Content Include="chess_app\templates\play.html" />

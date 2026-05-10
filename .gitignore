@@ -31,3 +31,4 @@ obj/
 packages/
 *.db
 *.zip
+/chess_app/static/js/visualization_board.js.bak

@@ -67,6 +67,25 @@
                       {% endfor %}
                   </select>
               </label>
+              {% if is_admin %}
+                <div class="admin-box">
+                  <strong>Admin-Link für diese Konfiguration:</strong>
+
+                  <code id="adminParameterLink">
+                    {{ url_for(
+                        'visualization.index',
+                        parameter=current_parameter,
+                        _external=True
+                    ) }}
+                  </code>
+                </div>
+              {% endif %}
+
+              {% if parameter_error %}
+                <div class="status error">
+                  Parameter konnte nicht gelesen werden: {{ parameter_error }}
+                </div>
+              {% endif %}
           </div>
           <div class="row">
             <button id="generateTaskBtn" type="button">Neue Aufgabe generieren</button>
@@ -91,5 +110,9 @@
     <script>
         window.INITIAL_FEN = {{ fen|tojson }};
     </script>
-<script src="{{ url_for('static', filename='js/visualization_board.js') }}"></script>
+    <script>
+      window.INITIAL_TASK = {{ initial_task|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/board.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/visualization.js') }}"></script>
 {% endblock %}
