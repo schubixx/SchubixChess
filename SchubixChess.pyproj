@@ -21,6 +21,7 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="chess_app\static\css\app.css" />
+    <Content Include="chess_app\static\css\board.css" />
     <Content Include="chess_app\static\css\visualization.css" />
     <Content Include="chess_app\static\img\chesspieces\merida\bB.svg" />
     <Content Include="chess_app\static\img\chesspieces\merida\bK.svg" />
@@ -38,6 +39,7 @@
     <Content Include="chess_app\static\js\play.js" />
     <Content Include="chess_app\static\js\visualization.js" />
     <Content Include="chess_app\templates\base.html" />
+    <Content Include="chess_app\templates\board.html" />
     <Content Include="chess_app\templates\chess960.html" />
     <Content Include="chess_app\templates\error.html" />
     <Content Include="chess_app\templates\menu.html" />

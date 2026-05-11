@@ -1,0 +1,139 @@
+﻿:root {
+  --board-size: min(40vw, 540px);
+  --coord-size: 24px;
+}
+
+
+/* ---------- Gesamtes Brett ---------- */
+
+.board-shell {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* ---------- Datei-Koordinaten oben/unten ---------- */
+
+.board-top-files,
+.board-bottom-files {
+  width: var(--board-size);
+  margin-left: var(--coord-size);
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  text-align: center;
+}
+
+.board-top-files > *,
+.board-bottom-files > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--coord-size);
+}
+
+/* ---------- Mittelteil ---------- */
+
+.board-middle {
+  display: grid;
+  grid-template-columns: var(--coord-size) var(--board-size) var(--coord-size);
+  align-items: stretch;
+}
+
+.board-middle {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* ---------- Brett ---------- */
+
+.board {
+  width: var(--board-size);
+  height: var(--board-size);
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  border: 2px solid #6b7280;
+}
+
+.square {
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+
+.square.light {
+  background: #f0d9b5;
+}
+
+.square.dark {
+  background: #b58863;
+}
+
+/* ---------- Figuren ---------- */
+
+.piece {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.piece.dragging {
+  opacity: 0.45;
+}
+
+
+/* ---------- Reihen-Koordinaten ---------- */
+
+.board-ranks-left,
+.board-ranks-right {
+  width: var(--coord-size);
+  height: var(--board-size);
+  display: grid;
+  grid-template-rows: repeat(8, 1fr);
+}
+
+  .board-ranks-left > *,
+  .board-ranks-right > * {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+.coord-outer {
+  font-size: 14px;
+  font-weight: 700;
+  color: #7c8794;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (min-width: 701px) and (max-width: 1100px) {
+  :root {
+    --board-size: min(74vw, 620px);
+    --coord-size: 22px;
+  }
+}
+
+/* ---------- Handy ---------- */
+
+@media (max-width: 700px) {
+  :root {
+    --board-size: min(78vw, 420px);
+    --coord-size: 16px;
+  }
+
+  .coord-outer {
+    font-size: 12px;
+  }
+
+
+  .board-panel {
+    overflow-x: hidden;
+  }
+
+  .board-shell {
+    transform-origin: top center;
+  }
+
+}

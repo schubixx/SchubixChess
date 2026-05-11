@@ -1,0 +1,175 @@
+/* board.css - nur Brett + Koordinaten */
+
+.board-shell {
+  --coord-size: 18px;
+  --coord-gap: 4px;
+
+  width: min(100%, 560px);
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: var(--coord-size) minmax(0, 1fr) var(--coord-size);
+  grid-template-rows: var(--coord-size) auto var(--coord-size);
+  column-gap: var(--coord-gap);
+  row-gap: var(--coord-gap);
+}
+
+.board-top-files {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.board-middle {
+  grid-column: 1 / 4;
+  grid-row: 2;
+
+  display: grid;
+  grid-template-columns: var(--coord-size) minmax(0, 1fr) var(--coord-size);
+  column-gap: var(--coord-gap);
+  align-items: stretch;
+}
+
+.board-bottom-files {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.board {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+
+  border: 2px solid #6b7280;
+  overflow: hidden;
+  user-select: none;
+}
+
+.board-top-files,
+.board-bottom-files {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  align-items: center;
+  text-align: center;
+  height: var(--coord-size);
+}
+
+.board-ranks-left,
+.board-ranks-right {
+  width: var(--coord-size);
+
+  display: grid;
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+  align-items: center;
+  text-align: center;
+}
+
+.coord-outer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 0;
+  min-height: 0;
+
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  color: #7c8794;
+}
+
+.square {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  font-size: 0;
+}
+
+.square.light {
+  background: #f0d9b5;
+}
+
+.square.dark {
+  background: #b58863;
+}
+
+.square.highlight {
+  outline: 3px solid #facc15;
+  outline-offset: -3px;
+}
+
+.square.selected {
+  outline: 4px solid #2563eb;
+  outline-offset: -4px;
+}
+
+.piece {
+  width: 86%;
+  height: 86%;
+  object-fit: contain;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-drag: element;
+}
+
+.piece.dragging {
+  opacity: 0.45;
+}
+
+.board-top-files,
+.board-bottom-files,
+.board-ranks-left,
+.board-ranks-right {
+  overflow: hidden;
+}
+
+.board-top-files .coord-outer,
+.board-bottom-files .coord-outer,
+.board-ranks-left .coord-outer,
+.board-ranks-right .coord-outer {
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 701px) and (max-width: 1100px) {
+  .board-shell {
+    --coord-size: 16px;
+    --coord-gap: 2px;
+    width: min(100%, 720px);
+  }
+
+  .coord-outer {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 700px) {
+  .board-shell {
+    width: min(100%, 92vw);
+    --coord-size: 16px;
+    --coord-gap: 3px;
+  }
+
+  .coord-outer {
+    font-size: 12px;
+  }
+
+  .piece {
+    width: 88%;
+    height: 88%;
+  }
+}

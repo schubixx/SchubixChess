@@ -5,11 +5,8 @@
 {% endblock %}
 
 {% block styles %}
-<link rel="stylesheet"
-      href="{{ url_for(
-          'static',
-          filename='css/visualization.css'
-      ) }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/board.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -18,18 +15,9 @@
 
  <section class="board-panel">
      <h1>Schach 960 Startstellung</h1>
-     <div class="board-shell">
-       <div class="board-top-files" id="boardTopFiles"></div>
-
-       <div class="board-middle">
-         <div class="board-ranks-left" id="boardRanksLeft"></div>
-         <div id="board" class="board"></div>
-         <div class="board-ranks-right" id="boardRanksRight"></div>
-       </div>
-
-       <div class="board-bottom-files" id="boardBottomFiles"></div>
-     </div>
+     {% include "board.html" %}
  </section>
+<section class="side-panel">
 
   <div class="controls">
 
@@ -47,7 +35,7 @@
 
   </div>
 
-</div>
+</section>
 
 {% endblock %}
 
