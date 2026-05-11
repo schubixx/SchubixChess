@@ -32,3 +32,6 @@ packages/
 *.db
 *.zip
 /chess_app/static/js/visualization_board.js.bak
+/chess_app/static/css/app.css.bak
+/chess_app/static/css/app.css.neu.bak
+/chess_app/static/css/app_xxx.css
