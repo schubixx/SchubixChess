@@ -166,6 +166,11 @@ class LichessPuzzleService:
                         gameVisualisierung=chess.pgn.Game()
                         gameVisualisierung.setup(boardVisualisierung)
                         gameVisualisierung.headers["Event"]="Visualisierungsaufgabe"
+                        gameVisualisierung.headers["Site"]="https://lichess.org/training/"+puzzle_id
+                        gameVisualisierung.headers["WhiteELo"]=str(rating)
+                        gameVisualisierung.headers["BlackELo"]=str(rating)
+                        gameVisualisierung.headers["PuzzleId"] = puzzle_id
+                        gameVisualisierung.headers["Source"] = "Lichess"
                     elif differenz==1:
                         boardVisualisierung.push(zug)
                         node=gameVisualisierung.add_variation(zug)
