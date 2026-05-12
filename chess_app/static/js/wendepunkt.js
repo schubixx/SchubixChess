@@ -156,6 +156,14 @@ function handleSquareClick(squareEl, squareName) {
     checkMove(move);
 }
 
+function updateTaskId(taskId) {
+  const el = document.getElementById("taskIdDisplay");
+
+  if (el) {
+    el.textContent = taskId || "-";
+  }
+}
+
 async function checkMove(move) {
   const response = await fetch('/wendepunkt/check_move', {
     method: 'POST',
@@ -214,6 +222,7 @@ async function generateTask() {
     solutionShown = false;
     historyItems = data.history_items || [];
     solutionItems = [];
+    updateTaskId(data.task_id);
     renderHistoryHighlight();
 
     document.getElementById("showSolutionBtn").disabled = true;
@@ -253,14 +262,41 @@ function bindEvents() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    bindEvents();
+  bindEvents();
+
+  if (window.INITIAL_TASK) {
+    navigationFens =
+      window.INITIAL_TASK.navigation_fens || [window.INITIAL_TASK.fen];
+
+    navigationSans =
+      window.INITIAL_TASK.navigation_sans || [];
+
+    navigationIndex = 0;
+
+    historyItems =
+      window.INITIAL_TASK.history_items || [];
+
+    solutionShown = false;
+    solutionItems = [];
 
     window.Board.setFenAndOrientation(
-        window.INITIAL_FEN || 'start',
-        boardInteractionOptions()
+      navigationFens[0],
+      boardInteractionOptions()
     );
 
-    setNavigationLine([window.Board.getFen()], [], 0);
+    renderHistoryHighlight();
+    updateNavigationStatus();
+    updateTaskId(window.INITIAL_TASK.task_id);
+
+    return;
+  }
+
+  window.Board.setFenAndOrientation(
+    window.INITIAL_FEN || 'start',
+    boardInteractionOptions()
+  );
+
+  setNavigationLine([window.Board.getFen()], [], 0);
 });
 
 async function showSolution() {

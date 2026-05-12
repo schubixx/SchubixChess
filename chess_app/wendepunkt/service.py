@@ -47,3 +47,28 @@ class WendepunktService:
 
         finally:
             conn.close()
+
+    def hole_aufgabe_by_task_id(self, task_id: str):
+        conn = self.create_connection()
+        try:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT
+                    TASK_ID,
+                    GAME,
+                    Event,
+                    Site,
+                    White,
+                    Black,
+                    WhiteElo,
+                    BlackElo
+                FROM games
+                WHERE TASK_ID = ?
+                """,
+                (task_id,),
+            )
+            return cursor.fetchone()
+        finally:
+            conn.close()
+

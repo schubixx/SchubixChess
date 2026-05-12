@@ -27,6 +27,30 @@ def load_game(pgn_text: str):
 
     return game
 
+def build_pgn_from_row(row):
+    (
+        task_id,
+        moves,
+        event,
+        site,
+        white,
+        black,
+        white_elo,
+        black_elo,
+    ) = row
+
+    pgn_text = (
+        f'[Event "{event or "?"}"]\n'
+        f'[Site "{site or "?"}"]\n'
+        f'[White "{white or "Weiß"}"]\n'
+        f'[Black "{black or "Schwarz"}"]\n'
+        f'[WhiteElo "{white_elo or "?"}"]\n'
+        f'[BlackElo "{black_elo or "?"}"]\n'
+        "\n"
+        f"{moves.strip()}\n"
+    )
+
+    return pgn_text, task_id
 
 def san_to_german(san: str) -> str:
     replacements = {
@@ -98,14 +122,43 @@ def get_node_at_index(game, index: int):
 @wendepunkt_bp.route("/")
 def index():
     selected_rating = session.get("wendepunkt_rating", 2000)
+    task_id = request.args.get("TASK")
+
+    initial_task = None
+    fen = chess.STARTING_FEN
+    loaded_task_id = None
+
+    if task_id:
+        service = WendepunktService()
+        row = service.hole_aufgabe_by_task_id(task_id)
+
+        if row:
+            pgn_text, loaded_task_id = build_pgn_from_row(row)
+            task = build_mainline_task(pgn_text)
+
+            session["wendepunkt_pgn"] = pgn_text
+            session["wendepunkt_task_id"] = loaded_task_id
+            session["wendepunkt_user_has_answered"] = False
+            session.modified = True
+
+            initial_task = {
+                "fen": task.fen,
+                "history": task.history,
+                "history_items": task.history_items,
+                "navigation_fens": task.navigation_fens,
+                "navigation_sans": task.navigation_sans,
+                "task_id": loaded_task_id,
+            }
+
+            fen = task.fen
 
     return render_template(
         "wendepunkt.html",
-        fen=chess.STARTING_FEN,
+        fen=fen,
         selected_rating=selected_rating,
-        initial_task=None,
+        initial_task=initial_task,
+        loaded_task_id=loaded_task_id,
     )
-
 
 @wendepunkt_bp.post("/generate_task")
 def generate_task():
@@ -154,6 +207,7 @@ def generate_task():
     session["wendepunkt_rating"] = rating
     session.modified = True
     session["wendepunkt_user_has_answered"] = False
+    session["wendepunkt_task_id"] = task_id
 
     task = build_mainline_task(pgn_text)
 
@@ -173,6 +227,7 @@ def generate_task():
         "history_items": task.history_items,
         "navigation_fens": task.navigation_fens,
         "navigation_sans": task.navigation_sans,
+        "task_id": task_id,
         "message": "Wendepunkt-Aufgabe geladen.",
     })
 
