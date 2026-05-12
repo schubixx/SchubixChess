@@ -10,7 +10,7 @@
 
 <div class="menu-grid">
 
-  <a class="menu-card" href="{{ url_for('main.visualization') }}">
+  <a class="menu-card" href="{{ url_for('visualization.index') }}">
 
     <h2>
       Visualisierungsaufgaben
@@ -21,6 +21,18 @@
       Brettvorstellung trainieren.
     </p>
   </a>
+
+  <a class="menu-card" href="{{ url_for('wendepunkt.index') }}">
+
+    <h2>
+      Finde den Wendepunkt
+    </h2>
+
+    <p>
+      Finde die von Weiß oder Schwarz verpasste taktische Chance, die Partie zu entscheiden.
+    </p>
+  </a>
+
 
 
   <a class="menu-card" href="{{ url_for('play.select_fen') }}">

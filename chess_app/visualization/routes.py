@@ -658,7 +658,7 @@ def generate_task():
         **task.to_dict(),
         **get_session_state(),
         "parameter": encoded_parameter,
-        "message": "Neue Aufgabe generiert",
+        "message": "Neue Aufgabe : "+ task.start_fen,
     })
 
 @visualization_bp.route("/solution", methods=["GET"])

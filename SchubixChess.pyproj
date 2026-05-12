@@ -38,6 +38,7 @@
     <Content Include="chess_app\static\js\board.js" />
     <Content Include="chess_app\static\js\play.js" />
     <Content Include="chess_app\static\js\visualization.js" />
+    <Content Include="chess_app\static\js\wendepunkt.js" />
     <Content Include="chess_app\templates\base.html" />
     <Content Include="chess_app\templates\board.html" />
     <Content Include="chess_app\templates\chess960.html" />
@@ -51,6 +52,7 @@
     <Content Include="chess_app\templates\play\fen_select.html" />
     <Content Include="chess_app\templates\play\new_collection.html" />
     <Content Include="chess_app\templates\visualization.html" />
+    <Content Include="chess_app\templates\wendepunkt.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +72,10 @@
     <Compile Include="chess_app\visualization\routes.py" />
     <Compile Include="chess_app\visualization\task_state.py" />
     <Compile Include="chess_app\visualization\__init__.py" />
+    <Compile Include="chess_app\wendepunkt\routes.py" />
+    <Compile Include="chess_app\wendepunkt\service.py" />
+    <Compile Include="chess_app\wendepunkt\state.py" />
+    <Compile Include="chess_app\wendepunkt\__init__.py" />
     <Compile Include="chess_app\__init__.py" />
     <Compile Include="run.py" />
   </ItemGroup>
@@ -87,6 +93,7 @@
     <Folder Include="chess_app\templates" />
     <Folder Include="chess_app\templates\play\" />
     <Folder Include="chess_app\visualization" />
+    <Folder Include="chess_app\wendepunkt\" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.9" />

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Finde den Wendepunkt{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/visualization.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/board.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page">
+        <section class="board-panel">
+            <h1>Finde den Wendepunkt</h1>
+            {% include "board.html" %}
+            <div id="status" class="status">Bereit</div>
+            <!--<section class="history-panel">-->
+                <!--<h2>Zughistorie</h2>-->
+                <div id="moveHistory" class="history"></div>
+            <!--</section>-->
+            <div class="board-nav" aria-label="Partienavigation">
+                <button id="prevMoveBtn" type="button" title="Einen Zug zurück">←</button>
+                <button id="nextMoveBtn" type="button" title="Einen Zug vor">→</button>
+                <button id="showSolutionBtn" type="button">Lösung</button>
+            </div>
+            <div id="navStatus" class="nav-status" hidden>Zug 0 / 0</div>
+        </section>
+
+        <section class="side-panel">
+          <div class="settings-row">
+              <label>
+                  Rating
+                  <input
+                    id="ratingInput"
+                    type="number"
+                    min="1000"
+                    max="3000"
+                    step="100"
+                    value="{{ selected_rating or 2000 }}">
+              </label>
+          </div>
+          <div class="row">
+            <button id="generateTaskBtn" type="button">Neue Aufgabe generieren</button>
+            <button id="downloadPgnBtn">PGN herunterladen</button>
+          </div>
+        </section>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+  window.INITIAL_FEN = {{ fen|tojson }};
+  window.INITIAL_TASK = {{ initial_task|tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/board.js') }}"></script>
+<script src="{{ url_for('static', filename='js/wendepunkt.js') }}"></script>
+{% endblock %}

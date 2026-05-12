@@ -5,6 +5,7 @@ from .main.routes import main_bp
 from .play.routes import play_bp
 from .auth.lichess import auth_bp
 from .visualization.routes import visualization_bp
+from .wendepunkt.routes import wendepunkt_bp
 from .chess960.routes import chess960_bp
 from .utils import get_current_collection, store_collection_from_request, is_admin
 from .config import DEFAULT_PIECE_SET, AVAILABLE_PIECE_SETS
@@ -25,6 +26,7 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(play_bp)
     app.register_blueprint(visualization_bp)
+    app.register_blueprint(wendepunkt_bp)
     app.register_blueprint(chess960_bp)
 
     @app.context_processor
