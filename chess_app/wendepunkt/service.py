@@ -23,7 +23,7 @@ class WendepunktService:
             cursor.execute(
                 """
                 SELECT
-                    id,
+                    task_id,
                     game,
                     WhiteElo,
                     Event,
