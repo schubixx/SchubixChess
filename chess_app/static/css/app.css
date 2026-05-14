@@ -260,5 +260,31 @@ body {
     order: 1;
   }
 
+}
 
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  margin-bottom: 32px;
+}
+
+.admin-table th,
+.admin-table td {
+  border: 1px solid #d1d5db;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.admin-table th {
+  background: #f3f4f6;
+}
+
+@media (max-width: 900px) {
+  .admin-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 }

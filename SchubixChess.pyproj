@@ -66,6 +66,7 @@
     <Compile Include="chess_app\models.py" />
     <Compile Include="chess_app\services\lichess_puzzle_service.py" />
     <Compile Include="chess_app\services\play_service.py" />
+    <Compile Include="chess_app\services\user_move_log_service.py" />
     <Compile Include="chess_app\services\visualization_service.py" />
     <Compile Include="chess_app\services\__init__.py" />
     <Compile Include="chess_app\utils.py" />

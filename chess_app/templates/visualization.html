@@ -30,7 +30,13 @@
           <div class="settings-row">
               <label>
                   Halbzüge
-                  <input id="number1" type="number" min="1" step="1" value="{{ selected_number1 }}">
+                  <input
+                    id="number1"
+                    type="number"
+                    min="2"
+                    max="20"
+                    step="2"
+                    value="{{ selected_number1 or 2 }}" />
               </label>
 
               <label>

@@ -9,6 +9,7 @@ from .wendepunkt.routes import wendepunkt_bp
 from .chess960.routes import chess960_bp
 from .utils import get_current_collection, store_collection_from_request, is_admin
 from .config import DEFAULT_PIECE_SET, AVAILABLE_PIECE_SETS
+from .services.user_move_log_service import init_user_move_log_db
 
 
 def create_app():
@@ -59,5 +60,6 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+        init_user_move_log_db()
 
     return app

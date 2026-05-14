@@ -3,12 +3,14 @@ import chess
 import chess.pgn
 import io
 from datetime import datetime
+from ..services.user_move_log_service import log_wendepunkt_move
 
 from .service import WendepunktService
 from .state import (
     build_mainline_task,
     is_correct_wendepunkt_move,
     build_solution_items,
+    find_first_variation_move,
 )
 
 
@@ -245,37 +247,58 @@ def check_move():
     move_text = str(data.get("move", "")).strip()
     index = int(data.get("index", 0))
 
+    if not move_text:
+        return jsonify({
+            "ok": False,
+            "message": "Bitte einen Zug eingeben.",
+        }), 400
+
     game = load_game(pgn_text)
     node = get_node_at_index(game, index)
 
-    session["wendepunkt_user_has_answered"] = True
-    session.modified = True
-
-    if len(node.variations) < 2:
-        return jsonify({
-            "ok": True,
-            "correct": False,
-            "message": "In dieser Stellung gibt es keine Wendepunkt-Variante.",
-        })
-
-    expected_move = node.variation(1).move.uci()
-
-
-    is_correct, expected = is_correct_wendepunkt_move(
-        pgn_text=pgn_text,
-        index=index,
-        move_uci=move_text,
-    )
+    username = session.get("lichess_username")
 
     session["wendepunkt_user_has_answered"] = True
     session.modified = True
+
+    expected = None
+    correct_move_number = None
+    is_correct = False
+
+    if len(node.variations) >= 2:
+        # Es gibt an der aktuellen Stellung eine Nebenvariante.
+        expected = node.variation(1).move.uci()
+        correct_move_number = index
+        is_correct = move_text[:4] == expected[:4]
+
+        message = "Richtig!" if is_correct else "Leider falsch."
+
+    else:
+        # An der aktuellen Stellung gibt es keine Nebenvariante.
+        # Für das Logging soll trotzdem die erste vorhandene Wendepunkt-
+        # Nebenvariante der Partie gefunden werden.
+        correct_move_number, expected = find_first_variation_move(game)
+
+        message = "Leider falsch."
+
+    if username:
+        log_wendepunkt_move(
+            lichess_username=username,
+            task_id=session.get("wendepunkt_task_id", ""),
+            current_move_number=index,
+            entered_move=move_text,
+            correct_move_number=correct_move_number,
+            correct_move=expected or "",
+            is_correct=is_correct,
+        )
 
     return jsonify({
         "ok": True,
         "correct": is_correct,
         "expected": expected,
+        "correct_move_number": correct_move_number,
         "user_has_answered": True,
-        "message": "Richtig!" if is_correct else "Leider falsch.",
+        "message": message,
     })
 
 @wendepunkt_bp.route("/solution")

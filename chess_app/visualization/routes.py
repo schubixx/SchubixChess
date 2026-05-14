@@ -13,6 +13,7 @@ from ..LichessEnums import Thema, Laenge, THEMA_NAMEN, LAENGE_NAMEN
 from .parameter_codec import (encode_visualization_parameter,decode_visualization_parameter,)
 from flask import Blueprint, jsonify, render_template, request, Response, session
 from datetime import datetime
+from ..services.user_move_log_service import log_visualization_move
 
 
 '''
@@ -66,6 +67,8 @@ class TaskState:
         # Notationen
         self.mainline_text = self._format_mainline(game)
         self.solution_text = self._format_with_variations(game)
+
+        self.puzzle_id = game.headers.get("PuzzleId", "")
 
         # Navigation
         self.navigation_fens, self.navigation_sans = self._build_navigation(game)
@@ -332,6 +335,7 @@ class TaskState:
             "navigation_fens": self.navigation_fens,
             "navigation_sans": self.navigation_sans,
             "first_move_uci": self.first_move_uci,
+            "puzzle_id": self.puzzle_id,
         }
 
     def solution_dict(self):
@@ -397,6 +401,13 @@ def generate_task_pgn(number1, number2, select1, select2) -> str:
 def create_task_from_values(number1, number2, select1, select2):
     global current_task, board
 
+    # Minimum
+    number1 = max(2, number1)
+
+    # gerade Zahl erzwingen
+    if number1 % 2 != 0:
+        number1 += 1
+
     pgn_text = generate_task_pgn(
         number1,
         number2,
@@ -415,6 +426,8 @@ def create_task_from_values(number1, number2, select1, select2):
     session["selected_number2"] = number2
     session["selected_thema"] = select1
     session["selected_laenge"] = select2
+
+    session["puzzle_id"] = current_task.puzzle_id
 
     session.modified = True
 
@@ -504,7 +517,7 @@ def index():
 
     selected_thema = session.get("selected_thema", Thema.ZUFALL.value)
     selected_laenge = session.get("selected_laenge", Laenge.BELIEBIG.value)
-    selected_number1 = session.get("selected_number1", 3)
+    selected_number1 = session.get("selected_number1", 2)
     selected_number2 = session.get("selected_number2", 1500)
 
     encoded_parameter = request.args.get("parameter")
@@ -711,6 +724,18 @@ def check_solution_move():
     task = TaskState(pgn_text)
     expected = task.first_move_uci
     is_correct = move[:4] == expected[:4]
+
+    username = session.get("lichess_username")
+
+    if username:
+        log_visualization_move(
+            lichess_username=username,
+            puzzle_id=session.get("puzzle_id", ""),
+            halfmoves=int(session.get("selected_number1", 0)),
+            entered_move=move,
+            correct_move=expected,
+            is_correct=is_correct,
+        )
 
     session["user_has_answered"] = True
     session.modified = True

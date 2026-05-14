@@ -188,3 +188,35 @@ def is_correct_wendepunkt_move(
 
     # move_uci[:4] ignoriert Promotion, z. B. e7e8q.
     return move_uci[:4] == expected[:4], expected
+
+def find_first_variation_move(game):
+    """
+    Sucht die erste Stellung der Hauptvariante,
+    an der eine Nebenvariante vorhanden ist.
+
+    Rückgabe:
+    (
+        zugnummer_der_stellung,
+        erster_zug_der_nebenvariante_als_uci
+    )
+
+    Beispiel:
+    (5, "e2e4")
+    """
+
+    node = game
+    index = 0
+
+    while node.variations:
+
+        # Hauptvariante + mindestens eine Nebenvariante
+        if len(node.variations) >= 2:
+            return (
+                index,
+                node.variation(1).move.uci()
+            )
+
+        node = node.variation(0)
+        index += 1
+
+    return None, None
