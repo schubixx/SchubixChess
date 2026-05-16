@@ -196,8 +196,8 @@ async function generateTask() {
       rating = 2000;
     }
 
-    rating = Math.max(1000, Math.min(3000, rating));
-    rating = Math.round(rating / 100) * 100;
+    //rating = Math.max(1000, Math.min(3000, rating));
+    //rating = Math.round(rating / 100) * 100;
 
     const response = await fetch('/wendepunkt/generate_task', {
         method: 'POST',

@@ -166,7 +166,7 @@ def index():
 def generate_task():
     data = request.get_json() or {}
     rating = int(data.get("rating", 2000))
-    rating = max(1000, min(3000, rating))
+    rating = max(600, min(3000, rating))
 
     # optional auf 100er runden
     rating = round(rating / 100) * 100
