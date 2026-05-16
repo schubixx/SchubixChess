@@ -35,3 +35,5 @@ packages/
 /chess_app/static/css/app.css.bak
 /chess_app/static/css/app.css.neu.bak
 /chess_app/static/css/app_xxx.css
+/chess_app/data/puzzles_small.db-shm
+/chess_app/data/puzzles_small.db-wal
