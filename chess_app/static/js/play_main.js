@@ -1,12 +1,19 @@
 ﻿function showToast(message, type = "success") {
-    const toast = document.getElementById("toast");
+  let toast = document.getElementById("toast");
 
-    toast.textContent = message;
-    toast.className = "toast show " + type;
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toast";
+    toast.className = "toast";
+    document.body.appendChild(toast);
+  }
 
-    setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2000);
+  toast.textContent = message;
+  toast.className = "toast show " + type;
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2000);
 }
 
 async function copyCollectionLink(link) {

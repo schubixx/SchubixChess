@@ -4,6 +4,9 @@
 <link rel="stylesheet"
       href="{{ url_for('static', filename='css/play.css') }}">
 {% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/play_main.js') }}"></script>
+{% endblock %}
 
 {% block content %}
 
@@ -16,28 +19,28 @@
   <p>Aufruf mit folgendem Link:</p>
 
   <code id="collection-link">
-      {{ url_for('play.index', COLLECTION=collection_id, _external=True) }}
+      {{ url_for('play.select_fen', COLLECTION=collection_id, _external=True) }}
   </code>
 
   <br><br>
 
   <button
       type="button"
-      onclick="copyCollectionLink('{{ url_for('main.menu', COLLECTION=collection_id, _external=True) }}')">
+      onclick="copyCollectionLink('{{ url_for('play.select_fen', COLLECTION=collection_id, _external=True) }}')">
       Link kopieren
   </button>
 
   <br><br>
 
   <img
-      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ url_for('play.index', COLLECTION=collection_id, _external=True) | urlencode }}"
+      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ url_for('play.select_fen', COLLECTION=collection_id, _external=True) | urlencode }}"
       alt="QR Code"
       class="qr-code"
   />  
 
   <br><br>
 
-  <a href="{{ url_for('play.index', COLLECTION=collection_id, _external=True) }}" target="_blank">
+  <a href="{{ url_for('play.select_fen', COLLECTION=collection_id, _external=True) }}" target="_blank">
       <button type="button">Collection öffnen</button>
   </a>
 </section>

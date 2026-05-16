@@ -64,6 +64,7 @@
     <Compile Include="chess_app\main\routes.py" />
     <Compile Include="chess_app\main\__init__.py" />
     <Compile Include="chess_app\models.py" />
+    <Compile Include="chess_app\play\routes.py" />
     <Compile Include="chess_app\services\lichess_puzzle_service.py" />
     <Compile Include="chess_app\services\play_service.py" />
     <Compile Include="chess_app\services\user_move_log_service.py" />
@@ -84,6 +85,7 @@
     <Folder Include="chess_app" />
     <Folder Include="chess_app\auth" />
     <Folder Include="chess_app\main" />
+    <Folder Include="chess_app\play\" />
     <Folder Include="chess_app\services" />
     <Folder Include="chess_app\static\" />
     <Folder Include="chess_app\static\css" />

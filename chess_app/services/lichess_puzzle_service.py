@@ -45,6 +45,17 @@ class LichessPuzzleService:
             raise ValueError("anzahl muss größer als 0 sein")
         return random.randrange(anzahl)
 
+    @staticmethod
+    def split_thema_filter(themen_nummer: int) -> tuple[int, int]:
+        """
+        Rückgabe: (tag_id, phase_id)
+        Genau einer der beiden Werte ist > 0.
+        """
+        if themen_nummer >= 1000:
+            return 0, themen_nummer - 1000
+
+        return themen_nummer, 0
+
     def sql_filter_lichess(
         self,
         min_rating: int,
@@ -61,15 +72,35 @@ class LichessPuzzleService:
         else:
             themen_nummer = int(themen_nummer)
 
+        tag_id, phase_id = self.split_thema_filter(themen_nummer)
+
         if laenge is None:
             laenge = self.laenge
 
         sql_filter = " FROM puzzles p WHERE rating >= ? AND rating < ?"
         params: List[int] = [min_rating, max_rating]
 
-        if themen_nummer > 0:
-            sql_filter += " AND theme = ?"
-            params.append(themen_nummer)
+        if tag_id > 0:
+            sql_filter += """
+                AND EXISTS (
+                    SELECT 1
+                    FROM Tags t
+                    WHERE t.puzzleId = p.id
+                      AND t.tagId = ?
+                )
+            """
+            params.append(tag_id)
+
+        if phase_id > 0:
+            sql_filter += """
+                AND EXISTS (
+                    SELECT 1
+                    FROM phase ph
+                    WHERE ph.puzzleId = p.id
+                      AND ph.phaseId = ?
+                )
+            """
+            params.append(phase_id)
 
         if laenge > 0:
             sql_filter += " AND length = ?"
@@ -123,6 +154,7 @@ class LichessPuzzleService:
         Gibt None zurück, wenn keine Aufgabe gefunden wurde.
         """
         sql_filter, params = self.sql_filter_lichess(self.min_rating, self.max_rating)
+        #sql_filter= sql_filter + " AND id='0QrO1' "
         anzahl_aufgaben = self.get_anzahl_aufgaben(conn, sql_filter, params)
 
         if anzahl_aufgaben == 0:
@@ -133,7 +165,7 @@ class LichessPuzzleService:
         sql = (
             "SELECT gameId, id, FEN, solution, halfmove, rating"
             + sql_filter
-            + " LIMIT ?, 1;"
+            + "LIMIT ?, 1;"
         )
 
         cursor = conn.cursor()
@@ -206,6 +238,7 @@ class LichessPuzzleService:
                     fen=fen,
                     fen_start=board.fen(),
                     solution=solution,
+                    pgn_komplett="",
                     halfmove=halfmove,
                     schwarz_am_zug=(halfmove % 2 == 0),
                     rating=rating,
@@ -230,7 +263,7 @@ class LichessPuzzleService:
 
 if __name__ == "__main__":
     # Beispielverwendung:
-    conn = LichessPuzzleService.create_connection("puzzles_small.db")
+    conn = LichessPuzzleService.create_connection()
 
     service = LichessPuzzleService(
         themen_nummer=Thema.GABEL,

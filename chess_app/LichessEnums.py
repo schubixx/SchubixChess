@@ -16,49 +16,75 @@ LAENGE_NAMEN = {
 }
 
 
+from enum import IntEnum
+
+
 class Thema(IntEnum):
     ZUFALL = 0
-    ABLENKUNG = 154
-    ABZUGSANGRIFF = 104
-    ANGRIFF_AUF_DEM_DAMENFLUEGEL = 111
-    ANGRIFF_AUF_DEM_KOENIGSFLUEGEL = 109
-    ANGRIFF_AUF_F2_ODER_F7 = 102
-    DOPPELSCHACH = 105
-    EXPONIERTER_KOENIG = 106
-    FESSELUNG = 110
-    GABEL = 107
-    GEFANGENE_FIGUR = 114
-    HAENGENDE_FIGUR = 108
-    HINLENKUNG = 151
-    MATT_IN_1 = 201
-    MATT_IN_2 = 202
-    MATT_IN_3 = 203
-    MATT_IN_4 = 204
-    MATT_IN_5 = 205
-    MATT = 200
-    MATT_ANASTASIA = 206
-    MATT_ARABISCHES = 207
-    MATT_BODEN_MATT = 209
-    MATT_ERSTICKTES_MATT = 213
-    MATT_GRUNDREIHENMATT = 208
-    MATT_HAKENMATT = 212
-    MATT_LAEUFERPAARMATT = 210
-    MATT_STERNMATT = 211
-    OPFER = 112
-    RAEUMUNG = 152
-    ROENTGEN_ANGRIFF = 158
-    SCHLAGE_DEN_VERTEIDIGER = 103
-    SPIESS = 113
-    STILLER_ZUG = 157
-    UNTERBRECHUNG = 155
-    VERTEIDIGUNGSZUG = 153
-    VORGERUECKTER_BAUER = 101
+
+    # normale Motive
+    VORGERUECKTER_BAUER = 117
+    ANGRIFF_AUF_F2_ODER_F7 = 121
+    SCHLAGE_DEN_VERTEIDIGER = 113
+    ABZUGSANGRIFF = 103
+    DOPPELSCHACH = 104
+    EXPONIERTER_KOENIG = 118
+    GABEL = 100
+    HAENGENDE_FIGUR = 112
+    ANGRIFF_AUF_DEM_KOENIGSFLUEGEL = 119
+    FESSELUNG = 101
+    ANGRIFF_AUF_DEM_DAMENFLUEGEL = 120
+    OPFER = 114
+    SPIESS = 102
+    GEFANGENE_FIGUR = 111
+
+    HINLENKUNG = 105
+    VERTEIDIGUNGSZUG = 116
+    ABLENKUNG = 106
+    RAEUMUNG = 108
+    UNTERBRECHUNG = 107
+    STILLER_ZUG = 115
+    ZWISCHENZUG = 110
+    ROENTGEN_ANGRIFF = 109
+
+    # in INITIAL_TAG_MAP nicht enthalten, daher frei vergeben
     ZUGZWANG = 159
-    ZWISCHENZUG = 156
+
+    # Matt allgemein
+    MATT = 200
+
+    # Matt in X
+    MATT_IN_1 = 1
+    MATT_IN_2 = 2
+    MATT_IN_3 = 3
+    MATT_IN_4 = 4
+    MATT_IN_5 = 5
+
+    # Mattbilder
+    MATT_ANASTASIA = 10
+    MATT_ARABISCHES = 11
+    MATT_GRUNDREIHENMATT = 12
+    MATT_BODEN_MATT = 13
+    MATT_LAEUFERPAARMATT = 14
+    MATT_STERNMATT = 15
+    MATT_HAKENMATT = 16
+    MATT_ERSTICKTES_MATT = 17
+
+    # Phasen ab 1000
+    PHASE_EROEFFNUNG = 1001
+    PHASE_MITTELSPIEL = 1002
+    PHASE_ENDSPIEL = 1003
+    PHASE_BAUERN_ENDSPIEL = 1004
+    PHASE_TURM_ENDSPIEL = 1005
+    PHASE_LAEUFER_ENDSPIEL = 1006
+    PHASE_SPRINGER_ENDSPIEL = 1007
+    PHASE_DAMEN_ENDSPIEL = 1008
+    PHASE_DAME_TURM_ENDSPIEL = 1009
 
 
 THEMA_NAMEN = {
     Thema.ZUFALL: "Zufällige Aufgabe",
+
     Thema.ABLENKUNG: "Ablenkung",
     Thema.ABZUGSANGRIFF: "Abzugsangriff",
     Thema.ANGRIFF_AUF_DEM_DAMENFLUEGEL: "Angriff auf dem Damenflügel",
@@ -71,12 +97,15 @@ THEMA_NAMEN = {
     Thema.GEFANGENE_FIGUR: "Gefangene Figur",
     Thema.HAENGENDE_FIGUR: "Hängende Figur",
     Thema.HINLENKUNG: "Hinlenkung",
+
+    Thema.MATT: "Matt",
+
     Thema.MATT_IN_1: "Matt in 1",
     Thema.MATT_IN_2: "Matt in 2",
     Thema.MATT_IN_3: "Matt in 3",
     Thema.MATT_IN_4: "Matt in 4",
     Thema.MATT_IN_5: "Matt in 5",
-    Thema.MATT: "Matt",
+
     Thema.MATT_ANASTASIA: "Matt: Anastasia",
     Thema.MATT_ARABISCHES: "Matt: Arabisches",
     Thema.MATT_BODEN_MATT: "Matt: Boden-Matt",
@@ -85,6 +114,7 @@ THEMA_NAMEN = {
     Thema.MATT_HAKENMATT: "Matt: Hakenmatt",
     Thema.MATT_LAEUFERPAARMATT: "Matt: Läuferpaarmatt",
     Thema.MATT_STERNMATT: "Matt: Sternmatt",
+
     Thema.OPFER: "Opfer",
     Thema.RAEUMUNG: "Räumung",
     Thema.ROENTGEN_ANGRIFF: "Röntgen-Angriff",
@@ -96,4 +126,14 @@ THEMA_NAMEN = {
     Thema.VORGERUECKTER_BAUER: "Vorgerückter Bauer",
     Thema.ZUGZWANG: "Zugzwang",
     Thema.ZWISCHENZUG: "Zwischenzug",
+
+    Thema.PHASE_EROEFFNUNG: "Phase: Eröffnung",
+    Thema.PHASE_MITTELSPIEL: "Phase: Mittelspiel",
+    Thema.PHASE_ENDSPIEL: "Phase: Endspiel",
+    Thema.PHASE_BAUERN_ENDSPIEL: "Phase: Bauernendspiel",
+    Thema.PHASE_TURM_ENDSPIEL: "Phase: Turmendspiel",
+    Thema.PHASE_LAEUFER_ENDSPIEL: "Phase: Läuferendspiel",
+    Thema.PHASE_SPRINGER_ENDSPIEL: "Phase: Springerendspiel",
+    Thema.PHASE_DAMEN_ENDSPIEL: "Phase: Damenendspiel",
+    Thema.PHASE_DAME_TURM_ENDSPIEL: "Phase: Dame-Turm-Endspiel",
 }

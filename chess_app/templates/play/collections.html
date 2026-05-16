@@ -4,6 +4,9 @@
 <link rel="stylesheet"
       href="{{ url_for('static', filename='css/play.css') }}">
 {% endblock %}
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/play_main.js') }}"></script>
+{% endblock %}
 
 {% block content %}
 <h2>Meine Sammlungen</h2>
