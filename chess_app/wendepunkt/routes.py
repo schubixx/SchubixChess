@@ -11,6 +11,7 @@ from .state import (
     is_correct_wendepunkt_move,
     build_solution_items,
     find_first_variation_move,
+    get_variation_moves_at_index
 )
 
 
@@ -66,6 +67,34 @@ def san_to_german(san: str) -> str:
         san = san.replace(english, german)
 
     return san
+
+def strip_alternative_variations(pgn_text: str) -> str:
+    game = load_game(pgn_text)
+
+    def clean_node(node):
+        kept = []
+
+        for variation in node.variations:
+            comment = variation.comment or ""
+
+            if "TYPE:alternative" in comment:
+                continue
+
+            clean_node(variation)
+            kept.append(variation)
+
+        node.variations = kept
+
+    clean_node(game)
+
+    exporter = chess.pgn.StringExporter(
+        headers=True,
+        variations=True,
+        comments=False,
+    )
+
+    return game.accept(exporter)
+
 
 
 def build_mainline_navigation(game):
@@ -254,32 +283,42 @@ def check_move():
         }), 400
 
     game = load_game(pgn_text)
-    node = get_node_at_index(game, index)
 
-    username = session.get("lichess_username")
+    solution, alternatives = get_variation_moves_at_index(
+        pgn_text=pgn_text,
+        index=index,
+    )
+
+    correct_move_number = index if solution else None
+    expected = solution
+    is_correct = False
+    is_alternative = False
+
+    if solution is None and not alternatives:
+        correct_move_number, expected = find_first_variation_move(game)
+        message = "Leider falsch."
+    else:
+        is_correct = (
+            solution is not None
+            and move_text[:4] == solution[:4]
+        )
+
+        is_alternative = any(
+            move_text[:4] == alt[:4]
+            for alt in alternatives
+        )
+
+        if is_correct:
+            message = "Richtig!"
+        elif is_alternative:
+            message = "Es gibt an einer anderen Stelle einen besseren Zug."
+        else:
+            message = "Leider falsch."
 
     session["wendepunkt_user_has_answered"] = True
     session.modified = True
 
-    expected = None
-    correct_move_number = None
-    is_correct = False
-
-    if len(node.variations) >= 2:
-        # Es gibt an der aktuellen Stellung eine Nebenvariante.
-        expected = node.variation(1).move.uci()
-        correct_move_number = index
-        is_correct = move_text[:4] == expected[:4]
-
-        message = "Richtig!" if is_correct else "Leider falsch."
-
-    else:
-        # An der aktuellen Stellung gibt es keine Nebenvariante.
-        # Für das Logging soll trotzdem die erste vorhandene Wendepunkt-
-        # Nebenvariante der Partie gefunden werden.
-        correct_move_number, expected = find_first_variation_move(game)
-
-        message = "Leider falsch."
+    username = session.get("lichess_username")
 
     if username:
         log_wendepunkt_move(
@@ -295,6 +334,7 @@ def check_move():
     return jsonify({
         "ok": True,
         "correct": is_correct,
+        "alternative": is_alternative,
         "expected": expected,
         "correct_move_number": correct_move_number,
         "user_has_answered": True,
@@ -327,7 +367,7 @@ def solution():
 
 @wendepunkt_bp.route("/download_pgn")
 def download_pgn():
-    pgn_text = session.get("wendepunkt_pgn")
+    pgn_text = strip_alternative_variations(session["wendepunkt_pgn"])
 
     if not pgn_text:
         return jsonify({

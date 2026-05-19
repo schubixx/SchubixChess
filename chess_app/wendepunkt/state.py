@@ -41,6 +41,12 @@ def build_solution_items(pgn_text: str):
         # Nebenvarianten direkt an dieser Stellung
         if len(node.variations) > 1:
             for variation in node.variations[1:]:
+                comment = variation.comment or ""
+
+                if "TYPE:alternative" in comment:
+                    continue
+
+                # TYPE:solution oder erste unmarkierte Variante anzeigen
                 variation_board = board.copy()
                 variation_items = []
                 variation_node = variation
@@ -96,6 +102,28 @@ def san_to_german(san: str) -> str:
 
     return san
 
+def get_variation_moves_at_index(pgn_text: str, index: int):
+    game = load_game(pgn_text)
+    node = get_node_at_index(game, index)
+
+    solution = None
+    alternatives = []
+
+    if len(node.variations) < 2:
+        return solution, alternatives
+
+    for variation in node.variations[1:]:
+        comment = variation.comment or ""
+        move_uci = variation.move.uci()
+
+        if "TYPE:alternative" in comment:
+            alternatives.append(move_uci)
+        elif "TYPE:solution" in comment:
+            solution = move_uci
+        elif solution is None:
+            solution = move_uci
+
+    return solution, alternatives
 
 def build_mainline_task(pgn_text: str) -> WendepunktTask:
     game = load_game(pgn_text)
